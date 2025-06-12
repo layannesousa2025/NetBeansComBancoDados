@@ -4,6 +4,11 @@
  */
 package bancodados1;
 
+import java.beans.PropertyVetoException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 /**
  *
  * @author Layanne55896236
@@ -15,6 +20,7 @@ public class TelaInicial extends javax.swing.JFrame {
      */
     public TelaInicial() {
         initComponents();
+        setExtendedState(MAXIMIZED_BOTH);
     }
 
     /**
@@ -30,6 +36,7 @@ public class TelaInicial extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mCadastroPessoa = new javax.swing.JMenuItem();
+        mCasdastroProduto = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -55,6 +62,14 @@ public class TelaInicial extends javax.swing.JFrame {
         });
         jMenu1.add(mCadastroPessoa);
 
+        mCasdastroProduto.setText("CadastroProduto");
+        mCasdastroProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mCasdastroProdutoActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mCasdastroProduto);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
@@ -77,13 +92,17 @@ public class TelaInicial extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mCadastroPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCadastroPessoaActionPerformed
-             CadastroPessoa cp = new  CadastroPessoa ();
-             painel.add(cp);
-             cp.setVisible(true);
-        
-        
-        
+        CadastroPessoa cp = new  CadastroPessoa ();
+        painel.add(cp);
+        cp.setVisible(true);
+
     }//GEN-LAST:event_mCadastroPessoaActionPerformed
+
+    private void mCasdastroProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCasdastroProdutoActionPerformed
+         CadastroProduto cp = new  CadastroProduto();
+        painel.add(cp);
+        cp.setVisible(true);
+    }//GEN-LAST:event_mCasdastroProdutoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -125,6 +144,7 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem mCadastroPessoa;
+    private javax.swing.JMenuItem mCasdastroProduto;
     private javax.swing.JDesktopPane painel;
     // End of variables declaration//GEN-END:variables
 }
