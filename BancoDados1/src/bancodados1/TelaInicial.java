@@ -100,8 +100,8 @@ public class TelaInicial extends javax.swing.JFrame {
 
     private void mCasdastroProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCasdastroProdutoActionPerformed
          CadastroProduto cp = new  CadastroProduto();
-        painel.add(cp);
-        cp.setVisible(true);
+         painel.add(cp);
+         cp.setVisible(true);
     }//GEN-LAST:event_mCasdastroProdutoActionPerformed
 
     /**

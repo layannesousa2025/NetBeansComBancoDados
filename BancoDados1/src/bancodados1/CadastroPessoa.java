@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -53,7 +54,16 @@ public class CadastroPessoa extends javax.swing.JInternalFrame {
             Logger.getLogger(CadastroPessoa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+           
+         public void resetaCampos() { // Método para limpar os campos do formulário
+          codigo.setText(null); // Limpa campo código
+          nome.setText(null); // Limpa campo nome
+          cpf.setText(null); // Limpa campo CPF
+          email.setText(null); // Limpa campo email
+          telefone.setText(null); // Limpa campo telefone
+          btSituacao.clearSelection(); // Limpa seleção dos botões de situação
+          }
+     
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -124,6 +134,11 @@ public class CadastroPessoa extends javax.swing.JInternalFrame {
 
         btSituacao.add(rbAtivo);
         rbAtivo.setText("Ativo");
+        rbAtivo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                rbAtivoItemStateChanged(evt);
+            }
+        });
         rbAtivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbAtivoActionPerformed(evt);
@@ -132,6 +147,11 @@ public class CadastroPessoa extends javax.swing.JInternalFrame {
 
         btSituacao.add(rbInativo);
         rbInativo.setText("Inativo");
+        rbInativo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                rbInativoItemStateChanged(evt);
+            }
+        });
         rbInativo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbInativoActionPerformed(evt);
@@ -143,6 +163,11 @@ public class CadastroPessoa extends javax.swing.JInternalFrame {
         btCadastra.setText("Cadastra");
 
         btAltera.setText("Altera");
+        btAltera.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btAlteraMouseClicked(evt);
+            }
+        });
 
         btExcluir.setText("Excluir");
 
@@ -258,10 +283,38 @@ public class CadastroPessoa extends javax.swing.JInternalFrame {
          }
            
         
-        
+       
         
         
     }//GEN-LAST:event_tabelaMouseClicked
+
+    private void btAlteraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btAlteraMouseClicked
+               try {
+               Connection con = ConexaoMysql.conexaoBanco();
+               String sql = "UPDATE pessoa SET nome = ?,cpf =?,email= ?," 
+                       +"telefone = ?,situacao = ? WHERE id_pessoa = ? ;";
+               PreparedStatement stmt = con.prepareStatement(sql);
+               stmt.setString(1,nome.getText());
+               stmt.setString(2,cpf.getText());
+               stmt.setString(3,email.getText());
+               stmt.setString(4,telefone.getText());
+               stmt.setString(5, situacao);
+               stmt.setString(6,codigo.getText());
+               stmt.executeUpdate(); // Executa atualização no banco
+               JOptionPane.showMessageDialog(null, "Pessoa Alterada com Sucesso!!!"); 
+               atualizarTabela();
+           } catch (SQLException ex) {
+               Logger.getLogger(CadastroProduto.class.getName()).log(Level.SEVERE, null, ex);
+           }
+    }//GEN-LAST:event_btAlteraMouseClicked
+
+    private void rbAtivoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rbAtivoItemStateChanged
+               situacao = "A";
+    }//GEN-LAST:event_rbAtivoItemStateChanged
+
+    private void rbInativoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rbInativoItemStateChanged
+                   situacao = "I"; // Define a variável situação como Inativo
+    }//GEN-LAST:event_rbInativoItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
