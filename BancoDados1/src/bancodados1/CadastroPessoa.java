@@ -161,6 +161,11 @@ public class CadastroPessoa extends javax.swing.JInternalFrame {
         jLabel6.setText("Situacao");
 
         btCadastra.setText("Cadastra");
+        btCadastra.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btCadastraMouseClicked(evt);
+            }
+        });
 
         btAltera.setText("Altera");
         btAltera.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -316,6 +321,37 @@ public class CadastroPessoa extends javax.swing.JInternalFrame {
                    situacao = "I"; // Define a variável situação como Inativo
     }//GEN-LAST:event_rbInativoItemStateChanged
 
+    private void btCadastraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCadastraMouseClicked
+         try {
+             Connection con = ConexaoMysql.conexaoBanco();
+             String sql = "INSERT INTO pessoa(nome,cpf,telefone,email)"
+                     +"VALUES(?,?,?,?)";
+             PreparedStatement stmt =con.prepareStatement(sql);
+             stmt.setString(1,nome.getText());
+             stmt.setString(2,cpf.getText());
+             stmt.setString(3,telefone.getText());
+             stmt.setString(4,email.getText());
+             stmt.execute();
+             JOptionPane.showMessageDialog(null, "Cadastro da pessoa "+nome.getText()+" feita com Sucesso!!!");
+             stmt.close();
+             con.close();
+             atualizarTabela();
+             resetaCampos();
+               
+             
+         } catch (SQLException ex) {
+             Logger.getLogger(CadastroPessoa.class.getName()).log(Level.SEVERE, null, ex);
+         }
+            
+            
+        
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_btCadastraMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAltera;
@@ -338,4 +374,8 @@ public class CadastroPessoa extends javax.swing.JInternalFrame {
     private javax.swing.JTable tabela;
     private javax.swing.JTextField telefone;
     // End of variables declaration//GEN-END:variables
+
+    private void JoptionPane(Object object, String string) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
