@@ -299,6 +299,11 @@ public final class CadastroProduto extends javax.swing.JInternalFrame {
         });
 
         btExcluir1.setText("Excluir");
+        btExcluir1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btExcluir1MouseClicked(evt);
+            }
+        });
 
         denominacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -487,8 +492,32 @@ public final class CadastroProduto extends javax.swing.JInternalFrame {
                 
             
         
-        
     }//GEN-LAST:event_btCadastra1MouseClicked
+
+    private void btExcluir1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btExcluir1MouseClicked
+              try {
+                  Connection con = ConexaoMysql.conexaoBanco();
+                  String sql = "DELETE FROM produto WHERE id_produto = ?";
+                  PreparedStatement stmt = con.prepareStatement(sql);
+                  stmt.setString(1,codigo.getText());
+                  stmt.execute();
+                  JOptionPane.showConfirmDialog(null, "produto excluido com sucesso");
+                  stmt.close();
+                  con.close();
+                  atualizarTabela();
+                  resetarCampo();
+                  
+                  
+              } catch (SQLException ex) {
+                  Logger.getLogger(CadastroProduto.class.getName()).log(Level.SEVERE, null, ex);
+              }
+              
+             
+              
+        
+        
+        
+    }//GEN-LAST:event_btExcluir1MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -526,6 +555,10 @@ public final class CadastroProduto extends javax.swing.JInternalFrame {
     private javax.swing.JTable tabelaProduto;
     private javax.swing.JTextField telefone;
     // End of variables declaration//GEN-END:variables
+
+    private void resetarCampo() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
 
  

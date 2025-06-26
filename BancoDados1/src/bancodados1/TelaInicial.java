@@ -4,9 +4,14 @@
  */
 package bancodados1;
 
-import java.beans.PropertyVetoException;
+import java.awt.Component;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -15,14 +20,16 @@ import java.util.logging.Logger;
  */
 public class TelaInicial extends javax.swing.JFrame {
 
-    /**
+    /**                                                                 
      * Creates new form TelaInicial
      */
     public TelaInicial() {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
+        mPrincipal.setVisible(false);
+        mControleAcesso.setVisible(false);
     }
-
+                                            
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,23 +40,73 @@ public class TelaInicial extends javax.swing.JFrame {
     private void initComponents() {
 
         painel = new javax.swing.JDesktopPane();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        lbUsuario = new javax.swing.JLabel();
+        usuario = new javax.swing.JTextField();
+        lbSenha = new javax.swing.JLabel();
+        senha = new javax.swing.JPasswordField();
+        btEntra = new javax.swing.JButton();
+        mPrincipal = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mCadastroPessoa = new javax.swing.JMenuItem();
         mCasdastroProduto = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        mDeslogar = new javax.swing.JMenu();
+        mControleAcesso = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        lbUsuario.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lbUsuario.setText("Usuario:");
+
+        lbSenha.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lbSenha.setText("Senha:");
+
+        btEntra.setText("Entra no Sistema");
+        btEntra.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btEntraMouseClicked(evt);
+            }
+        });
+
+        painel.setLayer(lbUsuario, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        painel.setLayer(usuario, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        painel.setLayer(lbSenha, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        painel.setLayer(senha, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        painel.setLayer(btEntra, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout painelLayout = new javax.swing.GroupLayout(painel);
         painel.setLayout(painelLayout);
         painelLayout.setHorizontalGroup(
             painelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1286, Short.MAX_VALUE)
+            .addGroup(painelLayout.createSequentialGroup()
+                .addContainerGap(489, Short.MAX_VALUE)
+                .addGroup(painelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelLayout.createSequentialGroup()
+                        .addGroup(painelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbUsuario)
+                            .addComponent(lbSenha))
+                        .addGap(40, 40, 40)
+                        .addGroup(painelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(senha, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(533, 533, 533))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelLayout.createSequentialGroup()
+                        .addComponent(btEntra, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(546, 546, 546))))
         );
         painelLayout.setVerticalGroup(
             painelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 682, Short.MAX_VALUE)
+            .addGroup(painelLayout.createSequentialGroup()
+                .addGap(169, 169, 169)
+                .addGroup(painelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbUsuario))
+                .addGap(46, 46, 46)
+                .addGroup(painelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbSenha)
+                    .addComponent(senha, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(104, 104, 104)
+                .addComponent(btEntra, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(259, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Cadastro");
@@ -70,12 +127,30 @@ public class TelaInicial extends javax.swing.JFrame {
         });
         jMenu1.add(mCasdastroProduto);
 
-        jMenuBar1.add(jMenu1);
+        mPrincipal.add(jMenu1);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        mDeslogar.setText("deslogar");
+        mDeslogar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mDeslogarMouseClicked(evt);
+            }
+        });
+        mPrincipal.add(mDeslogar);
 
-        setJMenuBar(jMenuBar1);
+        mControleAcesso.setText("Controle de Acesso");
+        mControleAcesso.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mControleAcessoMouseClicked(evt);
+            }
+        });
+        mControleAcesso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mControleAcessoActionPerformed(evt);
+            }
+        });
+        mPrincipal.add(mControleAcesso);
+
+        setJMenuBar(mPrincipal);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -100,9 +175,81 @@ public class TelaInicial extends javax.swing.JFrame {
 
     private void mCasdastroProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCasdastroProdutoActionPerformed
          CadastroProduto cp = new  CadastroProduto();
-         painel.add(cp);
+          painel.add(cp);
          cp.setVisible(true);
     }//GEN-LAST:event_mCasdastroProdutoActionPerformed
+
+    private void btEntraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btEntraMouseClicked
+             
+        try {
+            Connection con = ConexaoMysql.conexaoBanco();
+            String sql= "SELECT * FROM login WHERE usuario = ? "
+                    + "AND senha = UPPER(MD5(?))";
+                   
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1,usuario.getText());
+            stmt.setString(2,senha.getText());
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                String tipoUsuario =rs.getString("tipo_usuario");
+                String situacao = rs.getString("situacao");
+                String resetarSenha = rs.getString("resetar_senha");
+                String codigoUsuario = rs.getString("id_login");
+                
+                if(tipoUsuario.equals("Admin")
+                        && situacao.equals("A") && resetarSenha.equals("N")){
+                mControleAcesso.setVisible(true);
+                mPrincipal.setVisible(true);
+                lbUsuario.setVisible(false);
+                lbSenha.setVisible(false);
+                usuario.setVisible(false);
+                senha.setVisible(false);
+                btEntra.setVisible(false);
+                usuario.setText(null);
+                senha.setText(null);
+            }else if (tipoUsuario.equals("Admin")
+                  && situacao.equals("A")&& resetarSenha.equals("S")){ 
+                JOptionPane.showMessageDialog(null, "voce precisa gera senha");
+                  ResetaSenha trs = new ResetaSenha();
+                  trs.codigo.setText(codigoUsuario);
+                  trs.usuario.setText(usuario.getText());
+                  painel.add(trs);
+                  trs.setVisible(true);
+             }}else{
+                JOptionPane.showMessageDialog(null,"Usuario Senha Icorreta!!!");
+                
+            }  
+                
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+       
+        
+    }//GEN-LAST:event_btEntraMouseClicked
+
+    private void mDeslogarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mDeslogarMouseClicked
+             mPrincipal.setVisible(false);
+                lbUsuario.setVisible(true);
+                lbSenha.setVisible(true);
+                usuario.setVisible(true);
+                senha.setVisible(true);
+                btEntra.setVisible(true);
+             
+         
+    }//GEN-LAST:event_mDeslogarMouseClicked
+
+    private void mControleAcessoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mControleAcessoMouseClicked
+               ControleAcesso ca = new ControleAcesso();
+               painel.add(ca);
+               ca.setVisible(true);
+    }//GEN-LAST:event_mControleAcessoMouseClicked
+
+    private void mControleAcessoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mControleAcessoActionPerformed
+              
+    }//GEN-LAST:event_mControleAcessoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -140,11 +287,23 @@ public class TelaInicial extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btEntra;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JLabel lbSenha;
+    private javax.swing.JLabel lbUsuario;
     private javax.swing.JMenuItem mCadastroPessoa;
     private javax.swing.JMenuItem mCasdastroProduto;
+    private javax.swing.JMenu mControleAcesso;
+    private javax.swing.JMenu mDeslogar;
+    private javax.swing.JMenuBar mPrincipal;
     private javax.swing.JDesktopPane painel;
+    public javax.swing.JPasswordField senha;
+    public javax.swing.JTextField usuario;
     // End of variables declaration//GEN-END:variables
+
+    private static class situacao {
+
+        public situacao() {
+        }
+    }
 }
